@@ -1,0 +1,2 @@
+24 Apr 2023 17:31:23,399 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db}
+24 Apr 2023 17:34:09,792 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db}

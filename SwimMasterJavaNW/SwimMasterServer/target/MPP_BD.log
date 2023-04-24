@@ -1,0 +1,14 @@
+24 Apr 2023 18:37:44,882 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db}
+24 Apr 2023 18:41:34,659 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db}
+24 Apr 2023 18:41:59,103 TRACE sm.persistance.repository.OperatorsDbRepository 51 getOneByUsernameAndPassword - Enter extracting operator with username johnnyTest and password parola_de_test
+24 Apr 2023 18:41:59,104 TRACE sm.persistance.repository.JdbcUtils 52 getConnection - Enter
+24 Apr 2023 18:41:59,105 TRACE sm.persistance.repository.JdbcUtils 23 getNewConnection - Enter
+24 Apr 2023 18:41:59,105 INFO  sm.persistance.repository.JdbcUtils 30 getNewConnection - trying to connect to database ... jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db
+24 Apr 2023 18:41:59,105 INFO  sm.persistance.repository.JdbcUtils 31 getNewConnection - user: null
+24 Apr 2023 18:41:59,106 INFO  sm.persistance.repository.JdbcUtils 32 getNewConnection - pass: null
+24 Apr 2023 18:41:59,356 TRACE sm.persistance.repository.JdbcUtils 61 getConnection - Exit with(org.sqlite.jdbc4.JDBC4Connection@46277df4)
+24 Apr 2023 18:41:59,360 ERROR sm.persistance.repository.OperatorsDbRepository 67 getOneByUsernameAndPassword - org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (no such table: operators)
+24 Apr 2023 18:42:13,692 TRACE sm.persistance.repository.OperatorsDbRepository 51 getOneByUsernameAndPassword - Enter extracting operator with username johnnyTest and password parola_de_test
+24 Apr 2023 18:42:13,693 TRACE sm.persistance.repository.JdbcUtils 52 getConnection - Enter
+24 Apr 2023 18:42:13,693 TRACE sm.persistance.repository.JdbcUtils 61 getConnection - Exit with(org.sqlite.jdbc4.JDBC4Connection@46277df4)
+24 Apr 2023 18:42:13,694 ERROR sm.persistance.repository.OperatorsDbRepository 67 getOneByUsernameAndPassword - org.sqlite.SQLiteException: [SQLITE_ERROR] SQL error or missing database (no such table: operators)

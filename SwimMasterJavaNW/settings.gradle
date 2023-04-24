@@ -1,0 +1,10 @@
+rootProject.name = 'SwimMasterJavaNW'
+include 'SwimMasterModule'
+include 'SwimMasterModel'
+include 'SwimMasterPersistance'
+include 'SwimMasterServices'
+include 'SwimMasterNetworking'
+include 'SwimMasterClient'
+include 'SwimMasterService'
+include 'SwimMasterServer'
+
