@@ -1,0 +1,12 @@
+24 Apr 2023 17:31:23,399 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db}
+24 Apr 2023 17:34:09,792 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:FacultateMPPSwimMasterJavaNWswimMaster.db}
+03 May 2023 08:39:39,091 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:\Facultate\MPP\SwimMasterJavaNW\swimMaster.db}
+03 May 2023 08:40:42,654 INFO  sm.persistance.repository.OperatorsDbRepository 21 <init> - Initializing OperatorsDBRepository with properties: {sm.server.port=44445, sm.jdbc.driver=org.sqlite.JDBC, sm.jdbc.url=jdbc:sqlite:D:\Facultate\MPP\SwimMasterJavaNW\swimMaster.db}
+03 May 2023 08:41:30,030 TRACE sm.persistance.repository.OperatorsDbRepository 51 getOneByUsernameAndPassword - Enter extracting operator with username johnnyTest and password parola_de_test
+03 May 2023 08:41:30,031 TRACE sm.persistance.repository.JdbcUtils 52 getConnection - Enter
+03 May 2023 08:41:30,031 TRACE sm.persistance.repository.JdbcUtils 23 getNewConnection - Enter
+03 May 2023 08:41:30,032 INFO  sm.persistance.repository.JdbcUtils 30 getNewConnection - trying to connect to database ... jdbc:sqlite:D:\Facultate\MPP\SwimMasterJavaNW\swimMaster.db
+03 May 2023 08:41:30,032 INFO  sm.persistance.repository.JdbcUtils 31 getNewConnection - user: null
+03 May 2023 08:41:30,033 INFO  sm.persistance.repository.JdbcUtils 32 getNewConnection - pass: null
+03 May 2023 08:41:30,417 TRACE sm.persistance.repository.JdbcUtils 61 getConnection - Exit with(org.sqlite.jdbc4.JDBC4Connection@7d7f1fa2)
+03 May 2023 08:41:30,435 TRACE sm.persistance.repository.OperatorsDbRepository 63 getOneByUsernameAndPassword - Exit

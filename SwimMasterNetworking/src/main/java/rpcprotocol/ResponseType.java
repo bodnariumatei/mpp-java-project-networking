@@ -1,0 +1,5 @@
+package rpcprotocol;
+
+public enum ResponseType {
+    OK, ERROR, COMPETITIONS_DELIVERED, PARTICIPANTS_DELIVERED, PARTICIPANT_REGISTERED
+}
