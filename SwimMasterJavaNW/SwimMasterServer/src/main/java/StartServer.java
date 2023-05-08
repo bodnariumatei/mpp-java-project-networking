@@ -1,4 +1,6 @@
+import sm.persistance.repository.CompetitionDbRepository;
 import sm.persistance.repository.OperatorsDbRepository;
+import sm.persistance.repository.ParticipantDbRepository;
 import sm.server.ServicesImpl;
 import sm.services.ISwimMasterServices;
 import utils.AbstractServer;
@@ -21,8 +23,10 @@ public class StartServer {
             System.err.println("Cannot find smserver.properties "+e);
             return;
         }
-        OperatorsDbRepository opRepo=new OperatorsDbRepository(serverProps);
-        ISwimMasterServices chatServerImpl=new ServicesImpl(opRepo);
+        OperatorsDbRepository opRepo = new OperatorsDbRepository(serverProps);
+        CompetitionDbRepository compeRepo = new CompetitionDbRepository(serverProps);
+        ParticipantDbRepository partRepo = new ParticipantDbRepository(serverProps);
+        ISwimMasterServices chatServerImpl = new ServicesImpl(opRepo, compeRepo, partRepo);
 
         int chatServerPort=defaultPort;
         try {

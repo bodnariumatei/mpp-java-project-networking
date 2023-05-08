@@ -1,11 +1,11 @@
 package sm.model.utils;
 
-public class ParticipantTableItem{
+public class ParticipantItem {
     private String name;
     private int age;
     private String competitions;
 
-    public ParticipantTableItem(String name, int age, String competitions) {
+    public ParticipantItem(String name, int age, String competitions) {
         this.name = name;
         this.age = age;
         this.competitions = competitions;

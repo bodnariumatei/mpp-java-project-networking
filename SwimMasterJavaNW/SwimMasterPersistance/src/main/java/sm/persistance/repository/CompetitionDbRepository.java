@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sm.model.Competition;
 import sm.model.CompetitionStyle;
-import sm.model.utils.CompetionTableItem;
+import sm.model.utils.CompetitionItem;
 import sm.persistance.ICompetitionRepository;
 
 import java.sql.Connection;
@@ -121,10 +121,10 @@ public class CompetitionDbRepository implements ICompetitionRepository {
     }
 
     @Override
-    public Iterable<CompetionTableItem> getAllWithNrOfParticipants() {
+    public Iterable<CompetitionItem> getAllWithNrOfParticipants() {
         logger.traceEntry("extracting competitions with nr of participants");
         Connection con = dbUtils.getConnection();
-        List<CompetionTableItem> competitions = new ArrayList<>();
+        List<CompetitionItem> competitions = new ArrayList<>();
         try(PreparedStatement preparedStatement = con.prepareStatement(
                 "select id, style, distance, COUNT(participant_id) as no_part from competitions c INNER JOIN registrations r ON c.id=r.competition_id GROUP BY id,style, distance")){
             try(ResultSet result = preparedStatement.executeQuery()) {
@@ -134,7 +134,7 @@ public class CompetitionDbRepository implements ICompetitionRepository {
                     int distance = result.getInt("distance");
                     int noParticipants = result.getInt("no_part");
 
-                    CompetionTableItem competition = new CompetionTableItem(distance, CompetitionStyle.valueOf(style), noParticipants);
+                    CompetitionItem competition = new CompetitionItem(distance, CompetitionStyle.valueOf(style), noParticipants);
                     competition.setId(id);
                     competitions.add(competition);
                 }
@@ -190,5 +190,29 @@ public class CompetitionDbRepository implements ICompetitionRepository {
             System.err.println("Error DB "+ex);
         }
         logger.traceExit();
+    }
+
+    public Competition getOneByStyleAndDistance(CompetitionStyle style, int distance) {
+        logger.traceEntry("extracting competition with style {} and distance {}m", style, distance);
+        Connection con = dbUtils.getConnection();
+        try(PreparedStatement preparedStatement = con.prepareStatement("select * from competitions where style=? and distance=?")){
+            preparedStatement.setString(1,style.toString());
+            preparedStatement.setInt(2, distance);
+            ResultSet result = preparedStatement.executeQuery();
+            if(result.next()) {
+                int cid = result.getInt("id");
+                int cDistance = result.getInt("distance");
+                String cStyle = result.getString("style");
+
+                Competition competition = new Competition(cDistance, CompetitionStyle.valueOf(cStyle));
+                competition.setId(cid);
+                logger.traceExit();
+                return competition;
+            }
+        }catch (SQLException ex) {
+            logger.error(ex);
+            System.err.println("Error DB " + ex);
+        }
+        return null;
     }
 }

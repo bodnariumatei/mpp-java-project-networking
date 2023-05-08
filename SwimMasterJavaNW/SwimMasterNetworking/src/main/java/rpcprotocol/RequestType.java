@@ -1,5 +1,5 @@
 package rpcprotocol;
 
 public enum RequestType {
-    LOGIN
+    LOGIN, LOGOUT, GET_COMPETITIONS, GET_PARTICIPANTS, REGISTER_PARTICIPANT, ADD_PARTICIPANT
 }

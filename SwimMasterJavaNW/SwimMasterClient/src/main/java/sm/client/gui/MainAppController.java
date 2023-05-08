@@ -1,43 +1,58 @@
 package sm.client.gui;
 
+import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import sm.model.Competition;
-import sm.model.utils.CompetionTableItem;
-import sm.model.utils.ParticipantTableItem;
+import sm.model.Operator;
+import sm.model.Participant;
+import sm.model.utils.CompetitionItem;
+import sm.model.utils.ParticipantItem;
+import sm.services.ISwimMasterObserver;
 import sm.services.ISwimMasterServices;
+import sm.services.SwimMasterException;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 
-public class MainAppController {
+public class MainAppController implements ISwimMasterObserver {
     private ISwimMasterServices server;
+    private Operator currentOperator;
+
     public void setServer(ISwimMasterServices server) {
         this.server = server;
     }
+    public void setCurrentOperator(Operator op) {
+        this.currentOperator = op;
+    }
 
     @FXML
-    private TableView<CompetionTableItem> competitionsTableView;
-    private TableView.TableViewSelectionModel<CompetionTableItem> selectionModel;
+    private TableView<CompetitionItem> competitionsTableView;
+    private TableView.TableViewSelectionModel<CompetitionItem> selectionModel;
     @FXML
-    private TableColumn<CompetionTableItem, String> styleColumn;
+    private TableColumn<CompetitionItem, String> styleColumn;
     @FXML
-    private TableColumn<CompetionTableItem, String> distanceColumn;
+    private TableColumn<CompetitionItem, String> distanceColumn;
     @FXML
-    private TableColumn<CompetionTableItem, String> noParticipantsColumn;
+    private TableColumn<CompetitionItem, String> noParticipantsColumn;
 
     @FXML
-    private TableView<ParticipantTableItem> participantsTableView;
+    private TableView<ParticipantItem> participantsTableView;
     @FXML
-    private TableColumn<ParticipantTableItem, String> nameColumn;
+    private TableColumn<ParticipantItem, String> nameColumn;
     @FXML
-    private TableColumn<ParticipantTableItem, String> ageColumn;
+    private TableColumn<ParticipantItem, String> ageColumn;
     @FXML
-    private TableColumn<ParticipantTableItem, String> competitionsColumn;
+    private TableColumn<ParticipantItem, String> competitionsColumn;
 
     @FXML
     private TextField nameTextField;
@@ -46,21 +61,34 @@ public class MainAppController {
     private DatePicker dateOfBirthDatePicker;
 
     @FXML
-    private ListView<Competition> competitionsListView;
+    private ListView<CompetitionItem> competitionsListView;
 
-
-    /*@FXML
-    public void initialize() {
-        Properties props=new Properties();
+    @FXML
+    public void logout(ActionEvent event){
         try {
-            props.load(new FileReader("db.properties"));
-        } catch (IOException e) {
-            System.out.println("Cannot find db.properties "+e);
-        }
-        ParticipantDbRepository pRepo = new ParticipantDbRepository(props);
-        CompetitionDbRepository cRepo = new CompetitionDbRepository(props);
-        this.srv = new ContestService(pRepo, cRepo);
+            server.logout(currentOperator);
 
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login_scene.fxml"));
+            Parent root = fxmlLoader.load();
+
+            LoginSceneController ctrl = fxmlLoader.getController();
+            ctrl.setServer(server);
+
+            Scene scene = new Scene(root);
+            stage.setTitle("Login");
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (SwimMasterException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Can't log out!");
+            alert.show();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void loadScene() {
         setUpCompetitionsTable();
         loadCompetitionsTable();
         loadCompetitionsListView();
@@ -74,10 +102,10 @@ public class MainAppController {
 
         selectionModel = competitionsTableView.getSelectionModel();
 
-        ObservableList<CompetionTableItem> selectedItems = selectionModel.getSelectedItems();
+        ObservableList<CompetitionItem> selectedItems = selectionModel.getSelectedItems();
 
         selectedItems.addListener(
-                (ListChangeListener<? super CompetionTableItem>) change -> {
+                (ListChangeListener<? super CompetitionItem>) change -> {
                     loadParticipantsTable();
                 });
 
@@ -88,35 +116,50 @@ public class MainAppController {
 
     private void loadCompetitionsTable(){
         competitionsTableView.getItems().clear();
-        Iterable<CompetionTableItem> tableItems = srv.getCompetitionTableItems();
-        for(CompetionTableItem cti : tableItems){
-            competitionsTableView.getItems().add(cti);
+        Iterable<CompetitionItem> tableItems = null;
+        try {
+            tableItems = server.getCompetitions();
+            for(CompetitionItem cti : tableItems){
+                competitionsTableView.getItems().add(cti);
+            }
+        } catch (SwimMasterException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void loadParticipantsTable() {
-        CompetionTableItem cti = selectionModel.getSelectedItem();
+        CompetitionItem cti = selectionModel.getSelectedItem();
         if(cti != null) {
-            participantsTableView.getItems().clear();
-            Iterable<ParticipantTableItem> tableItems = srv.getParticipantsFromCompetition(cti.getId());
-            for(ParticipantTableItem pti : tableItems){
-                participantsTableView.getItems().add(pti);
+            try {
+                participantsTableView.getItems().clear();
+                CompetitionItem ci = new CompetitionItem(cti.getDistance(), cti.getStyle());
+                ci.setId(cti.getId());
+                Iterable<ParticipantItem> tableItems = server.getParticipants(ci);
+                for(ParticipantItem pti : tableItems){
+                    participantsTableView.getItems().add(pti);
+                }
+            } catch (SwimMasterException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
 
     private void loadCompetitionsListView(){
         competitionsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        Iterable<Competition> competitions = srv.getCompetitions();
-        for(Competition c: competitions){
-            competitionsListView.getItems().add(c);
+        try {
+            Iterable<CompetitionItem> competitions = server.getCompetitions();
+            for(CompetitionItem c: competitions){
+                competitionsListView.getItems().add(c);
+            }
+        } catch (SwimMasterException e) {
+            System.out.println(e.getMessage());
         }
-    }*/
+    }
 
 
     @FXML
     public void register(){
-       /* if(nameTextField.getText().isEmpty()){
+       if(nameTextField.getText().isEmpty()){
             System.out.println("Nume invalid");
             return;
         }
@@ -124,7 +167,7 @@ public class MainAppController {
             System.out.println("Data nu e oke");
             return;
         }
-        List<Competition> competitions = competitionsListView.getSelectionModel().getSelectedItems();
+        List<CompetitionItem> competitions = competitionsListView.getSelectionModel().getSelectedItems();
         if(competitions.size() == 0){
             System.out.println("N-ai selectat nimic");
             return;
@@ -133,24 +176,19 @@ public class MainAppController {
         String name = nameTextField.getText();
         LocalDateTime dateOfBirth = dateOfBirthDatePicker.getValue().atStartOfDay();
 
-        srv.addParticipant(name,dateOfBirth);
-        srv.registerAtCompetitions(name, competitions);
-
-        loadCompetitionsTable();
-        loadParticipantsTable();*/
-    }
-
-    @FXML
-    public void logout(ActionEvent event) throws IOException {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login_scene.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Login");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+        try {
+            server.register(new Participant(name, dateOfBirth), competitions);
+        } catch (SwimMasterException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 
+    @Override
+    public void participantRegistered() throws SwimMasterException {
+        Platform.runLater(() -> {
+            loadCompetitionsTable();
+            loadParticipantsTable();
+        });
+    }
 }
