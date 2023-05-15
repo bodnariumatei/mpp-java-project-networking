@@ -63,6 +63,8 @@ public class MainAppController implements ISwimMasterObserver {
     @FXML
     private ListView<CompetitionItem> competitionsListView;
 
+    private CompetitionItem currentCti;
+
     @FXML
     public void logout(ActionEvent event){
         try {
@@ -106,6 +108,7 @@ public class MainAppController implements ISwimMasterObserver {
 
         selectedItems.addListener(
                 (ListChangeListener<? super CompetitionItem>) change -> {
+                    currentCti = selectionModel.getSelectedItem();
                     loadParticipantsTable();
                 });
 
@@ -128,7 +131,7 @@ public class MainAppController implements ISwimMasterObserver {
     }
 
     private void loadParticipantsTable() {
-        CompetitionItem cti = selectionModel.getSelectedItem();
+        CompetitionItem cti = currentCti;
         if(cti != null) {
             try {
                 participantsTableView.getItems().clear();
@@ -187,8 +190,8 @@ public class MainAppController implements ISwimMasterObserver {
     @Override
     public void participantRegistered() throws SwimMasterException {
         Platform.runLater(() -> {
-            loadCompetitionsTable();
             loadParticipantsTable();
+            loadCompetitionsTable();
         });
     }
 }

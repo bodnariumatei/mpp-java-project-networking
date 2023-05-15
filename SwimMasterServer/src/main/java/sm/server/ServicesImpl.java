@@ -5,6 +5,7 @@ import sm.model.Operator;
 import sm.model.Participant;
 import sm.model.utils.CompetitionItem;
 import sm.model.utils.ParticipantItem;
+import sm.persistance.IOperatorsRepository;
 import sm.persistance.repository.CompetitionDbRepository;
 import sm.persistance.repository.OperatorsDbRepository;
 import sm.persistance.repository.ParticipantDbRepository;
@@ -12,6 +13,7 @@ import sm.services.ISwimMasterObserver;
 import sm.services.ISwimMasterServices;
 import sm.services.SwimMasterException;
 
+import java.awt.image.ImagingOpException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +22,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServicesImpl implements ISwimMasterServices {
-    OperatorsDbRepository opRepository;
+    IOperatorsRepository opRepository;
     CompetitionDbRepository compeRepository;
     ParticipantDbRepository participantRepo;
     private Map<Integer, ISwimMasterObserver> loggedClients;
 
-    public ServicesImpl(OperatorsDbRepository operatorsRepository,
+    public ServicesImpl(IOperatorsRepository operatorsRepository,
                         CompetitionDbRepository competitionsRepository,
                         ParticipantDbRepository participantRepo){
         this.opRepository = operatorsRepository;

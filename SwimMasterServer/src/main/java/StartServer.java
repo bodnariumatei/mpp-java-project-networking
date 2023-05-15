@@ -1,3 +1,6 @@
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import sm.persistance.orm.OperatorsORMRepository;
 import sm.persistance.repository.CompetitionDbRepository;
 import sm.persistance.repository.OperatorsDbRepository;
 import sm.persistance.repository.ParticipantDbRepository;
@@ -23,10 +26,20 @@ public class StartServer {
             System.err.println("Cannot find smserver.properties "+e);
             return;
         }
-        OperatorsDbRepository opRepo = new OperatorsDbRepository(serverProps);
         CompetitionDbRepository compeRepo = new CompetitionDbRepository(serverProps);
         ParticipantDbRepository partRepo = new ParticipantDbRepository(serverProps);
-        ISwimMasterServices chatServerImpl = new ServicesImpl(opRepo, compeRepo, partRepo);
+
+        OperatorsDbRepository opRepo = new OperatorsDbRepository(serverProps);
+
+
+        // A SessionFactory is set up once for an application!
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure("hibernate.cfg.xml").build(); // configures settings from hibernate.cfg.xml
+
+        OperatorsORMRepository opRepoORM = new OperatorsORMRepository(registry);
+
+
+        ISwimMasterServices chatServerImpl = new ServicesImpl(opRepoORM, compeRepo, partRepo);
 
         int chatServerPort=defaultPort;
         try {
