@@ -7,4 +7,5 @@ include 'SwimMasterNetworking'
 include 'SwimMasterClient'
 include 'SwimMasterService'
 include 'SwimMasterServer'
+include 'SwimMasterREST'
 

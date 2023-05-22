@@ -1,13 +1,14 @@
 package sm.persistance.repository;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sm.model.Competition;
 import sm.model.CompetitionStyle;
 import sm.model.utils.CompetitionItem;
 import sm.persistance.ICompetitionRepository;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,17 +16,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CompetitionDbRepository implements ICompetitionRepository {
 
     private JdbcUtils dbUtils;
     private static final Logger logger= LogManager.getLogger();
 
+    public CompetitionDbRepository(){
+        Properties serverProps=new Properties();
+        try {
+            serverProps.load(CompetitionDbRepository.class.getResourceAsStream("/smserver.properties"));
+            System.out.println("Server properties set. ");
+            serverProps.list(System.out);
+            this.dbUtils = new JdbcUtils(serverProps);
+        } catch (IOException e) {
+            System.err.println("Cannot find smserver.properties "+e);
+            return;
+        }
+    }
+
     public CompetitionDbRepository(Properties props) {
         logger.info("Initializing CompetitionDbRepository with properties: {}", props);
         this.dbUtils = new JdbcUtils(props);
     }
-
 
     @Override
     public Competition getOne(Integer id) {
@@ -117,6 +132,22 @@ public class CompetitionDbRepository implements ICompetitionRepository {
 
     @Override
     public Competition update(Competition entity) {
+        logger.traceEntry("updating competition {} ", entity);
+        Connection con = dbUtils.getConnection();
+
+        try(PreparedStatement preparedStatement = con.prepareStatement("update competitions SET distance=?, style=? where id=?")){
+            preparedStatement.setInt(1, entity.getDistance());
+            preparedStatement.setString(2, entity.getStyle().toString());
+            preparedStatement.setInt(3, entity.getId());
+
+            int result=preparedStatement.executeUpdate();
+            logger.trace("Competition {} deleted", result);
+            return entity;
+        }catch (SQLException ex){
+            logger.error(ex);
+            System.err.println("Error DB "+ex);
+        }
+        logger.traceExit();
         return null;
     }
 

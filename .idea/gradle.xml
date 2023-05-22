@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/SwimMasterModule" />
             <option value="$PROJECT_DIR$/SwimMasterNetworking" />
             <option value="$PROJECT_DIR$/SwimMasterPersistance" />
+            <option value="$PROJECT_DIR$/SwimMasterREST" />
             <option value="$PROJECT_DIR$/SwimMasterServer" />
             <option value="$PROJECT_DIR$/SwimMasterService" />
             <option value="$PROJECT_DIR$/SwimMasterServices" />
