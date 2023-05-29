@@ -29,20 +29,21 @@ public class ParticipantDbRepository implements IParticipantRepository{
         try(PreparedStatement preparedStatement = con.prepareStatement("select * from participants where id=?")){
             preparedStatement.setInt(1,id);
             ResultSet result = preparedStatement.executeQuery();
-            result.next();
-            int pid = result.getInt("id");
-            String name = result.getString("name");
-            LocalDateTime dateOfBirth = LocalDateTime.parse(result.getString("date_of_birth"));
+            if (result.next()) {
+                int pid = result.getInt("id");
+                String name = result.getString("name");
+                LocalDateTime dateOfBirth = LocalDateTime.parse(result.getString("date_of_birth"));
 
-            Participant participant = new Participant(name, dateOfBirth);
-            participant.setId(pid);
-            logger.traceExit();
-            return participant;
+                Participant participant = new Participant(name, dateOfBirth);
+                participant.setId(pid);
+                logger.traceExit();
+                return participant;
+            }
         }catch (SQLException ex) {
             logger.error(ex);
             System.err.println("Error DB " + ex);
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -121,20 +122,21 @@ public class ParticipantDbRepository implements IParticipantRepository{
         try(PreparedStatement preparedStatement = con.prepareStatement("select * from participants where name=?")){
             preparedStatement.setString(1,name);
             ResultSet result = preparedStatement.executeQuery();
-            result.next();
-            int id = result.getInt("id");
-            String pName = result.getString("name");
-            LocalDateTime dateOfBirth = LocalDateTime.parse(result.getString("date_of_birth"));
+            if (result.next()) {
+                int id = result.getInt("id");
+                String pName = result.getString("name");
+                LocalDateTime dateOfBirth = LocalDateTime.parse(result.getString("date_of_birth"));
 
-            Participant participant = new Participant(pName, dateOfBirth);
-            participant.setId(id);
-            logger.traceExit();
-            return participant;
+                Participant participant = new Participant(pName, dateOfBirth);
+                participant.setId(id);
+                logger.traceExit();
+                return participant;
+            }
         }catch (SQLException ex) {
             logger.error(ex);
             System.err.println("Error DB" + ex);
-            return null;
         }
+        return null;
     }
 
     @Override

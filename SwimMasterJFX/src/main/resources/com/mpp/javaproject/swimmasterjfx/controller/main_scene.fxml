@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mpp.javaproject.swimmasterjfx.controller.MainAppController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="629.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mpp.javaproject.swimmasterjfx.controller.MainAppController">
    <left>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="259.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="305.0" prefWidth="242.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
          <children>
             <Label text="Probe" textFill="#484463">
                <font>
@@ -18,30 +27,98 @@
             </Label>
             <TableView fx:id="competitionsTableView" prefHeight="362.0" prefWidth="262.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="styleColumn" prefWidth="80.79998779296875" text="Stil" />
-                <TableColumn fx:id="distanceColumn" prefWidth="76.0" text="Distanta" />
-                  <TableColumn fx:id="noParticipantsColumn" prefWidth="101.60003662109375" text="Nr participanti" />
+                <TableColumn fx:id="styleColumn" prefWidth="84.00002747774124" text="Stil" />
+                <TableColumn fx:id="distanceColumn" prefWidth="66.39996337890625" text="Distanta" />
+                  <TableColumn fx:id="noParticipantsColumn" prefWidth="110.39997863769531" text="Nr participanti" />
               </columns>
             </TableView>
          </children>
       </VBox>
    </left>
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="305.0" prefWidth="228.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER">
          <children>
             <Label text="Participanti" textFill="#140751">
                <font>
                   <Font name="Arial Black" size="24.0" />
                </font>
             </Label>
-            <TableView fx:id="participantsTableView" prefHeight="362.0" prefWidth="262.0">
+            <TableView fx:id="participantsTableView" prefHeight="362.0" prefWidth="340.0">
                <columns>
-                  <TableColumn fx:id="nameColumn" prefWidth="100.00000303983688" text="Nume" />
-                  <TableColumn fx:id="ageColumn" prefWidth="104.0" text="Varsta" />
-                  <TableColumn fx:id="competitionsColumn" prefWidth="131.1999969482422" text="Probe" />
+                  <TableColumn fx:id="nameColumn" prefWidth="67.20002591609955" text="Nume" />
+                  <TableColumn fx:id="ageColumn" prefWidth="71.20001983642578" text="Varsta" />
+                  <TableColumn fx:id="competitionsColumn" prefWidth="116.79998779296875" text="Probe" />
                </columns>
             </TableView>
          </children>
       </VBox>
    </center>
+   <bottom>
+      <HBox prefHeight="165.0" prefWidth="550.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="134.0" prefWidth="316.0" style="-fx-background-color: #d9d9d9;" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="CENTER" prefHeight="38.0" prefWidth="327.0" text="Înregistrare">
+                     <font>
+                        <Font name="Arial Black" size="24.0" />
+                     </font>
+                  </Label>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="91.79998779296875" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.60001220703123" minWidth="10.0" prefWidth="204.60001220703123" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Nume">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Data Nașterii" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="nameTextField" prefHeight="26.0" prefWidth="197.0" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="dateOfBirthDatePicker" prefHeight="26.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="TOP_RIGHT" prefHeight="166.0" prefWidth="262.0" style="-fx-background-color: #cccccc;" HBox.hgrow="ALWAYS">
+               <children>
+                  <ListView fx:id="competitionsListView" prefHeight="200.0" prefWidth="200.0" />
+                  <Button mnemonicParsing="false" onAction="#register" prefHeight="26.0" prefWidth="98.0" text="Înregistrează">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <right>
+      <VBox alignment="BOTTOM_CENTER" prefHeight="305.0" prefWidth="66.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#logout" text="LogOut" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" top="15.0" />
+         </padding>
+      </VBox>
+   </right>
 </BorderPane>

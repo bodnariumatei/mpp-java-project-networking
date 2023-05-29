@@ -173,4 +173,22 @@ public class CompetitionDbRepository implements ICompetitionRepository{
         logger.traceExit();
         return competitions;
     }
+
+    @Override
+    public void registerAtCompetition(int participant_id, int competition_id) {
+        logger.traceEntry(
+                "entering registration of participant with id {} at competition with id {} ", participant_id, competition_id);
+        Connection con = dbUtils.getConnection();
+        try(PreparedStatement preparedStatement = con.prepareStatement("insert into registrations values (?,?)")){
+            preparedStatement.setInt(1, participant_id);
+            preparedStatement.setInt(2, competition_id);
+
+            int result=preparedStatement.executeUpdate();
+            logger.trace("Saved {} instances", result);
+        }catch (SQLException ex){
+            logger.error(ex);
+            System.err.println("Error DB "+ex);
+        }
+        logger.traceExit();
+    }
 }

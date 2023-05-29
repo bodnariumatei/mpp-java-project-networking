@@ -7,6 +7,7 @@ import com.mpp.javaproject.swimmasterjfx.repository.participant.ParticipantDbRep
 import com.mpp.javaproject.swimmasterjfx.utils.tableview_items.CompetionTableItem;
 import com.mpp.javaproject.swimmasterjfx.utils.tableview_items.ParticipantTableItem;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,5 +39,22 @@ public class ContestService {
             participantTableItems.add(new ParticipantTableItem(p.getName(), p.getAge(), competitionsString.toString()));
         }
         return participantTableItems;
+    }
+
+    public Iterable<Competition> getCompetitions() {
+        return cRepo.getAll();
+    }
+
+    public void addParticipant(String name, LocalDateTime dateOfBirth){
+        if(pRepo.getOneByName(name) == null){
+            pRepo.store(new Participant(name, dateOfBirth));
+        }
+    }
+
+    public void registerAtCompetitions(String name, List<Competition> competitions) {
+        Participant p = pRepo.getOneByName(name);
+        competitions.forEach(c -> {
+            cRepo.registerAtCompetition(p.getId(), c.getId());
+        });
     }
 }

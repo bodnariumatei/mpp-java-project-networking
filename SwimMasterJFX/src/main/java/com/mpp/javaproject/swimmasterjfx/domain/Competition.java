@@ -24,4 +24,9 @@ public class Competition extends Entity<Integer>{
     public void setStyle(CompetitionStyle style) {
         this.style = style;
     }
+
+    @Override
+    public String toString() {
+        return this.style + " - " + this.distance +"m";
+    }
 }

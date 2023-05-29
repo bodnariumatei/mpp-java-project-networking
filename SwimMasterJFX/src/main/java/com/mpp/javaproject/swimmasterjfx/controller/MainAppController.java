@@ -1,5 +1,6 @@
 package com.mpp.javaproject.swimmasterjfx.controller;
 
+import com.mpp.javaproject.swimmasterjfx.domain.Competition;
 import com.mpp.javaproject.swimmasterjfx.repository.competition.CompetitionDbRepository;
 import com.mpp.javaproject.swimmasterjfx.repository.participant.ParticipantDbRepository;
 import com.mpp.javaproject.swimmasterjfx.service.ContestService;
@@ -7,14 +8,19 @@ import com.mpp.javaproject.swimmasterjfx.utils.tableview_items.CompetionTableIte
 import com.mpp.javaproject.swimmasterjfx.utils.tableview_items.ParticipantTableItem;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Properties;
 
 public class MainAppController {
@@ -39,6 +45,15 @@ public class MainAppController {
     @FXML
     private TableColumn<ParticipantTableItem, String> competitionsColumn;
 
+    @FXML
+    private TextField nameTextField;
+
+    @FXML
+    private DatePicker dateOfBirthDatePicker;
+
+    @FXML
+    private ListView<Competition> competitionsListView;
+
 
     @FXML
     public void initialize() {
@@ -54,6 +69,7 @@ public class MainAppController {
 
         setUpCompetitionsTable();
         loadCompetitionsTable();
+        loadCompetitionsListView();
     }
 
     private void setUpCompetitionsTable(){
@@ -95,6 +111,50 @@ public class MainAppController {
         }
     }
 
+    private void loadCompetitionsListView(){
+        competitionsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        Iterable<Competition> competitions = srv.getCompetitions();
+        for(Competition c: competitions){
+            competitionsListView.getItems().add(c);
+        }
+    }
 
+    @FXML
+    public void register(){
+        if(nameTextField.getText().isEmpty()){
+            System.out.println("Nume invalid, fraiere");
+            return;
+        }
+        if(dateOfBirthDatePicker.getValue() == null){
+            System.out.println("Data nu e oke");
+            return;
+        }
+        List<Competition> competitions = competitionsListView.getSelectionModel().getSelectedItems();
+        if(competitions.size() == 0){
+            System.out.println("N-ai selectat nimic, nebunule");
+            return;
+        }
+
+        String name = nameTextField.getText();
+        LocalDateTime dateOfBirth = dateOfBirthDatePicker.getValue().atStartOfDay();
+
+        srv.addParticipant(name,dateOfBirth);
+        srv.registerAtCompetitions(name, competitions);
+
+        loadCompetitionsTable();
+        loadParticipantsTable();
+    }
+
+    @FXML
+    public void logout(ActionEvent event) throws IOException {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login_scene.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Login");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
 
 }

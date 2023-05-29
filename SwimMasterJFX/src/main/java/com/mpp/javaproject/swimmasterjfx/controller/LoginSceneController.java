@@ -63,6 +63,8 @@ public class LoginSceneController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setResizable(true);
+        stage.setMinHeight(510);
+        stage.setMinWidth(550);
         stage.setTitle("SwimMaster");
         stage.setScene(mainScene);
     }
