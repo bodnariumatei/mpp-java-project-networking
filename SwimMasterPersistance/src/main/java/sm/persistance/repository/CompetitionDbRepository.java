@@ -141,7 +141,7 @@ public class CompetitionDbRepository implements ICompetitionRepository {
             preparedStatement.setInt(3, entity.getId());
 
             int result=preparedStatement.executeUpdate();
-            logger.trace("Competition {} deleted", result);
+            logger.trace("Competition {} updated", result);
             return entity;
         }catch (SQLException ex){
             logger.error(ex);
